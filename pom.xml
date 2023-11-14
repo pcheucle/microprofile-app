@@ -12,6 +12,7 @@
 	  <module>account</module>
 	  <module>client</module>
 	  <module>administration</module>
+	  <module>coordinator</module>
   </modules>
   
 </project>
