@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.eclipse.microprofile.lra.annotation.Compensate;
 import org.eclipse.microprofile.lra.annotation.ws.rs.LRA;
+import org.eclipse.microprofile.lra.annotation.ws.rs.LRA.Type;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
@@ -24,6 +25,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status.Family;
 
 @Path("administration")
 public class AdministrationResource {
@@ -62,7 +64,8 @@ public class AdministrationResource {
 
 	@DELETE
 	@Path("clients/{id}")
-	@LRA(timeLimit = 20)
+	@LRA(value = Type.REQUIRES_NEW, cancelOnFamily = { Family.CLIENT_ERROR,
+			Family.SERVER_ERROR }, end = true, timeLimit = 20)
 	public void deleteClient(@PathParam("id") UUID clientId) {
 		LOG.info("Deleting client " + clientId);
 		clientService.deleteClient(clientId);
